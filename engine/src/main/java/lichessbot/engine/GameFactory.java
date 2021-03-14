@@ -1,6 +1,8 @@
 package lichessbot.engine;
 
 import lichessbot.engine.impl.Game;
+import lichessbot.engine.impl.GameLoader;
+import lichessbot.engine.impl.Position;
 
 public class GameFactory {
   private GameFactory() {
@@ -8,6 +10,7 @@ public class GameFactory {
   }
 
   public static IGame createGame(int aheadMoves) {
-    return new Game();
+    Position position = GameLoader.createDefaultStartPosition();
+    return new Game(position, aheadMoves);
   }
 }

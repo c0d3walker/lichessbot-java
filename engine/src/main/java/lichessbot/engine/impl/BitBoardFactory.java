@@ -46,7 +46,7 @@ public class BitBoardFactory {
     public static boolean[] merge(boolean[]... bitboards) {
       boolean[] merged = copyBitboard(bitboards[0]);
       for (int fieldIndex = 0; fieldIndex < merged.length; fieldIndex++) {
-        for (int boardIndex = 1; !merged[fieldIndex]; boardIndex++) {
+        for (int boardIndex = 1; !merged[fieldIndex]&&boardIndex<bitboards.length; boardIndex++) {
           merged[fieldIndex] = bitboards[boardIndex][fieldIndex];
         }
       }
@@ -195,7 +195,7 @@ public class BitBoardFactory {
       return fieldIndex % 8;
     }
 
-    public static boolean[][] createKnigtMovementBitboard() {
+    public static boolean[][] createKnightMovementBitboard() {
       boolean[][] movementBitboards = new boolean[64][];
 
       for (int fieldIndex = 0; fieldIndex <= 63; fieldIndex++) {
