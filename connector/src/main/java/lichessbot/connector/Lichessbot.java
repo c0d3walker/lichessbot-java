@@ -1,6 +1,10 @@
 package lichessbot.connector;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.StringWriter;
@@ -13,12 +17,7 @@ import lichessbot.connector.handler.ContinueGamesHandler;
 import lichessbot.connector.handler.HandlerEnvironment;
 
 public class Lichessbot {
-// bot acc: jBgQDcbQ1WlxMGOw
-  public Lichessbot() {
-    // curl -X POST -d 'room=player&text=Hugo'
-    // https://lichess.org/api/board/game/imj7iFUs/chat -H "Authorization: Bearer
-    // jBgQDcbQ1WlxMGOw"
-    final String bearerToken = "jBgQDcbQ1WlxMGOw";
+  public Lichessbot(String bearerToken) {
     startEventHandler(bearerToken);
   }
 
@@ -42,9 +41,7 @@ public class Lichessbot {
 
       connection.setRequestMethod("POST");
       OutputStream os = connection.getOutputStream();
-      os.write(
-          "text=Update: Dieser Account kann noch niemanden herausfordern. Ich melde mich heute Abend einfach mal im Discord."
-              .getBytes());
+      os.write("text=Update: Dieser Account kann noch niemanden herausfordern. Ich melde mich heute Abend einfach mal im Discord.".getBytes());
       os.flush();
       os.close();
 
@@ -66,7 +63,13 @@ public class Lichessbot {
   }
 
   public static void main(String[] args) {
-    Lichessbot lichessbot = new Lichessbot();
+    try {
+      BufferedReader reader = new BufferedReader(new FileReader(new File("configuration/accessToken")));
+      String bearerToken = reader.readLine();
+      Lichessbot lichessbot = new Lichessbot(bearerToken);
+    } catch (IOException ex) {
+      ex.printStackTrace();
+    }
   }
 
 }
