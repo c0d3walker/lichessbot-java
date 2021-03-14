@@ -35,11 +35,11 @@ public class MoveCollector {
       int target = figure + moveDirection * 8;
       if (!gameField[target]) {
         moves.add(createMove(figure, target));
-      }
-      if (figure / 8 == 6 && !isWhite || figure / 8 == 1 && isWhite) {
-        target = figure + moveDirection * 16;
-        if (!gameField[target]) {
-          moves.add(createMove(figure, target));
+        if (figure / 8 == 6 && !isWhite || figure / 8 == 1 && isWhite) {
+          target = figure + moveDirection * 16;
+          if (!gameField[target]) {
+            moves.add(createMove(figure, target));
+          }
         }
       }
       target = figure + moveDirection * 7;
