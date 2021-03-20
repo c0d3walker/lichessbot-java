@@ -15,6 +15,6 @@ public interface IStatus {
   /**
    * @return additional information to the status
    */
-  String additionalInformation();
+  String getAdditionalInformation();
 
 }

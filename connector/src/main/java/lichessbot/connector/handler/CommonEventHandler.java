@@ -29,9 +29,9 @@ public class CommonEventHandler implements Runnable {
       connection.setRequestProperty("Authorization", "Bearer " + _bearerToken);
       connection.setDoOutput(true);
       BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-      String value = reader.readLine();
+      String value =null;
       while ((value = reader.readLine()) != null) {
-        if (value != null && !value.isEmpty()) {
+        if ( !value.isEmpty()) {
           try (JsonReader jsonReader = Json.createReader(new StringReader(value))) {
             JsonObject currentEvent = jsonReader.readObject();
             String eventType = currentEvent.getString("type");

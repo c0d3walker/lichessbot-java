@@ -35,7 +35,7 @@ public class Antichess implements IMoveEvaluator {
     }
     String bestMove = findBestMove(takeMoves);
     if (bestMove == null) {
-      findBestMove(normalMoves);
+     bestMove= findBestMove(normalMoves);
     }
     return new Status(true, "best move", bestMove);
   }

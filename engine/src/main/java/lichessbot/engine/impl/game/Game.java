@@ -28,8 +28,8 @@ public class Game implements IGame {
 
   @Override
   public IStatus executeMove(String move) {
-    int fromField = FieldConverter.toIndex(move.substring(0, 1));
-    int toField = FieldConverter.toIndex(move.substring(2, 3));
+    int fromField = FieldConverter.toIndex(move.substring(0, 2));
+    int toField = FieldConverter.toIndex(move.substring(2,4));
     IStatus updateFigureDataStatus = updateFigureData(fromField, toField);
     if (updateFigureDataStatus.isOK()) {
       updatePlayerData(fromField, toField);
@@ -38,6 +38,7 @@ public class Game implements IGame {
   }
 
   private IStatus updateFigureData(int fromField, int toField) {
+    emptyField(_position,toField);
     boolean isUpdatePending = !updateBitboard(_position.getPawnBitboard(), fromField, toField)//
         && !updateBitboard(_position.getCastelBitboard(), fromField, toField)//
         && !updateBitboard(_position.getKnightBitboard(), fromField, toField) //
@@ -48,6 +49,15 @@ public class Game implements IGame {
       return new Status(false, "Move denied", "");
     }
     return new Status(true, "Move accepted", "");
+  }
+
+  private void emptyField(Position position, int toField) {
+    position.getPawnBitboard()[toField]=false;
+    position.getCastelBitboard()[toField]=false;
+    position.getKnightBitboard()[toField]=false;
+    position.getBishopBitboard()[toField]=false;
+    position.getQueenBitboard()[toField]=false;
+    position.getKingBitboard()[toField]=false;
   }
 
   private boolean updateBitboard(boolean[] bitboard, int fromField, int toField) {
@@ -61,12 +71,14 @@ public class Game implements IGame {
 
   private void updatePlayerData(int fromField, int toField) {
     boolean isWhiteTurn = MetaDataBitboard.isWhiteTurn(_position.getMetaDataBitboard());
+    boolean[] whiteBitboard = _position.getWhiteBitboard();
     if (isWhiteTurn) {
-      boolean[] whiteBitboard = _position.getWhiteBitboard();
       whiteBitboard[fromField] = false;
       whiteBitboard[toField] = true;
       MetaDataBitboard.setBlackTurn(_position.getMetaDataBitboard());
     } else {
+      whiteBitboard[fromField]=false;
+      whiteBitboard[toField]=false;
       MetaDataBitboard.setWhiteTurn(_position.getMetaDataBitboard());
     }
   }

@@ -25,7 +25,7 @@ public class Status implements IStatus {
   }
 
   @Override
-  public String additionalInformation() {
+  public String getAdditionalInformation() {
     return _additionalInformation;
   }
 

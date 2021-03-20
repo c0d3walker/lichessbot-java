@@ -69,15 +69,7 @@ public class BitBoardFactory {
 
     public static boolean[] createWhiteBitboard() {
       boolean[] bitboard = createEmptyBitboard();
-      for (int fieldIndex = 0; fieldIndex < 15; fieldIndex++) {
-        bitboard[fieldIndex] = true;
-      }
-      return bitboard;
-    }
-
-    public static boolean[] createBlackBitboard() {
-      boolean[] bitboard = createEmptyBitboard();
-      for (int fieldIndex = 48; fieldIndex < 63; fieldIndex++) {
+      for (int fieldIndex = 0; fieldIndex < 16; fieldIndex++) {
         bitboard[fieldIndex] = true;
       }
       return bitboard;
@@ -88,7 +80,7 @@ public class BitBoardFactory {
       for (int fieldIndex = 8; fieldIndex <= 15; fieldIndex++) {
         bitboard[fieldIndex] = true;
       }
-      for (int fieldIndex = 8; fieldIndex <= 15; fieldIndex++) {
+      for (int fieldIndex = 48; fieldIndex <= 55; fieldIndex++) {
         bitboard[fieldIndex] = true;
       }
       return bitboard;
@@ -124,12 +116,14 @@ public class BitBoardFactory {
     public static boolean[] createQueenBitboard() {
       boolean[] bitboard = createEmptyBitboard();
       bitboard[3] = true;
+      bitboard[59] = true;
       return bitboard;
     }
 
     public static boolean[] createKingBitboard() {
       boolean[] bitboard = createEmptyBitboard();
       bitboard[4] = true;
+      bitboard[60] = true;
       return bitboard;
     }
   }

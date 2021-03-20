@@ -2,7 +2,6 @@ package lichessbot.connector;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -18,6 +17,7 @@ import lichessbot.connector.handler.HandlerEnvironment;
 
 public class Lichessbot {
   public Lichessbot(String bearerToken) {
+    System.setProperty(ILichessbotConstants.BOTNAME, "c0d3b0t");
     startEventHandler(bearerToken);
   }
 
