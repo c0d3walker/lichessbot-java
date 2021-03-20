@@ -20,7 +20,7 @@ public class MoveByteMapFactoryTest {
   
   @Test
   void testBishopMovementMap_existingVariants() {
-    byte[][] bishopMovementMap = MoveByteMapFactory.creatBishopMap();
+    byte[][] bishopMovementMap = MoveByteMapFactory.createBishopMap();
     boolean[][] bishopMovementBitboard = BitBoardFactory.FigureMovementBitboard.createBishopMovementBitboard();
     for (int variantIndex = 0; variantIndex < bishopMovementMap.length; variantIndex++) {
       assertCompareMovmentToProfile(bishopMovementMap, bishopMovementBitboard, variantIndex);

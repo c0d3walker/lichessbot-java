@@ -11,6 +11,7 @@ public class MoveCollector {
   private static final boolean[][] KING_MOVE_MAP = BitBoardFactory.FigureMovementBitboard.createKingMovementBitboard();
   private static final boolean[][] PAWN_MOVE_MAP = BitBoardFactory.FigureMovementBitboard.createPawnMovementBitboard();
   private static final byte[][] CASTEL_MOVE_MAP = MoveByteMapFactory.createCastleMap();
+  private static final byte[][] BISHOP_MOVE_MAP = MoveByteMapFactory.createBishopMap();
 
   public static List<String> collectAllPossibleMoves(Position position, boolean isWhite) {
     boolean[] gameField = getGameField(position);
@@ -20,19 +21,27 @@ public class MoveCollector {
     moves.addAll(collectKingMoves(position, isWhite, gameField, whiteBitboard));
     moves.addAll(collectPawnMoves(position, isWhite, gameField, whiteBitboard));
     moves.addAll(collectCastelMoves(position, isWhite, gameField, whiteBitboard));
+    moves.addAll(collectBishopMoves(position, isWhite, gameField, whiteBitboard));
     return moves;
   }
+
+  private static Collection<? extends String> collectBishopMoves(Position position, boolean isWhite, boolean[] gameField, boolean[] whiteBitboard) {
+    boolean[] bishopBitboard = position.getBishopBitboard();
+    List<Integer> figuresForPlayer = findFiguresForPlayer(isWhite, whiteBitboard, bishopBitboard);
+    return findRunMoves(isWhite, whiteBitboard, gameField, figuresForPlayer, BISHOP_MOVE_MAP);
+  }
+
 
   private static Collection<? extends String> collectCastelMoves(Position position, boolean isWhite, boolean[] gameField, boolean[] whiteBitboard) {
     boolean[] castelBitboard = position.getCastelBitboard();
     List<Integer> figuresForPlayer = findFiguresForPlayer(isWhite, whiteBitboard, castelBitboard);
-    return findCastelMoves(isWhite, whiteBitboard, gameField, figuresForPlayer);
+    return findRunMoves(isWhite, whiteBitboard, gameField, figuresForPlayer, CASTEL_MOVE_MAP);
   }
 
-  private static Collection<? extends String> findCastelMoves(boolean isWhite, boolean[] whiteBitboard, boolean[] gameField, List<Integer> figuresForPlayer) {
+  private static Collection<? extends String> findRunMoves(boolean isWhite, boolean[] whiteBitboard, boolean[] gameField, List<Integer> figuresForPlayer, byte[][] runMap) {
     List<String> moves = new ArrayList<>();
     for (int figure : figuresForPlayer) {
-      byte[] movementMap = CASTEL_MOVE_MAP[figure];
+      byte[] movementMap = runMap[figure];
       boolean executeCheck = true;
       for (int targetField : movementMap) {
         if (targetField == -1) {

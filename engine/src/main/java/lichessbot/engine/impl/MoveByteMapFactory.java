@@ -55,7 +55,7 @@ public class MoveByteMapFactory {
     return new byte[64][];
   }
 
-  public static byte[][] creatBishopMap() {
+  public static byte[][] createBishopMap() {
     byte[][] map = createEmptyMap();
 
     for (int field = 0; field < 64; field++) {
