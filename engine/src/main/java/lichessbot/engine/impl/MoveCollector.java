@@ -12,6 +12,7 @@ public class MoveCollector {
   private static final boolean[][] PAWN_MOVE_MAP = BitBoardFactory.FigureMovementBitboard.createPawnMovementBitboard();
   private static final byte[][] CASTEL_MOVE_MAP = MoveByteMapFactory.createCastleMap();
   private static final byte[][] BISHOP_MOVE_MAP = MoveByteMapFactory.createBishopMap();
+  private static final byte[][] QUEEN_MOVE_MAP = MoveByteMapFactory.createQueenMap();
 
   public static List<String> collectAllPossibleMoves(Position position, boolean isWhite) {
     boolean[] gameField = getGameField(position);
@@ -22,7 +23,14 @@ public class MoveCollector {
     moves.addAll(collectPawnMoves(position, isWhite, gameField, whiteBitboard));
     moves.addAll(collectCastelMoves(position, isWhite, gameField, whiteBitboard));
     moves.addAll(collectBishopMoves(position, isWhite, gameField, whiteBitboard));
+    moves.addAll(collectQueenMoves(position, isWhite, gameField, whiteBitboard));
     return moves;
+  }
+
+  private static Collection<? extends String> collectQueenMoves(Position position, boolean isWhite, boolean[] gameField, boolean[] whiteBitboard) {
+    boolean[] queenBitboard = position.getQueenBitboard();
+    List<Integer> figuresForPlayer = findFiguresForPlayer(isWhite, whiteBitboard, queenBitboard);
+    return findRunMoves(isWhite, whiteBitboard, gameField, figuresForPlayer, QUEEN_MOVE_MAP);
   }
 
   private static Collection<? extends String> collectBishopMoves(Position position, boolean isWhite, boolean[] gameField, boolean[] whiteBitboard) {
@@ -30,7 +38,6 @@ public class MoveCollector {
     List<Integer> figuresForPlayer = findFiguresForPlayer(isWhite, whiteBitboard, bishopBitboard);
     return findRunMoves(isWhite, whiteBitboard, gameField, figuresForPlayer, BISHOP_MOVE_MAP);
   }
-
 
   private static Collection<? extends String> collectCastelMoves(Position position, boolean isWhite, boolean[] gameField, boolean[] whiteBitboard) {
     boolean[] castelBitboard = position.getCastelBitboard();

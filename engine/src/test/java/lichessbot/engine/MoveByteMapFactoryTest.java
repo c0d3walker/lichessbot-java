@@ -29,7 +29,7 @@ public class MoveByteMapFactoryTest {
   
   @Test
   void testQueenMovementMap_existingVariants() {
-    byte[][] queenMovementMap = MoveByteMapFactory.creatQueenMap();
+    byte[][] queenMovementMap = MoveByteMapFactory.createQueenMap();
     boolean[][] queenMovementBitboard = BitBoardFactory.FigureMovementBitboard.createQueenMovementBitboard();
     for (int variantIndex = 0; variantIndex < queenMovementMap.length; variantIndex++) {
       assertCompareMovmentToProfile(queenMovementMap, queenMovementBitboard, variantIndex);

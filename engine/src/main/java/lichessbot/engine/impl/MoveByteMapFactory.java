@@ -20,7 +20,7 @@ public class MoveByteMapFactory {
     byte moveIndex = toLeft;
 
     for (byte target = toLeft; target > 0; target--) {
-      map[field][moveIndex - target] = (byte) (field - target);
+      map[field][moveIndex -target] = (byte) (field - (toLeft-target)-1);
     }
     map[field][moveIndex] = -1;
     moveIndex++;
@@ -108,7 +108,7 @@ public class MoveByteMapFactory {
     return expectedNumberOfFields;
   }
 
-  public static byte[][] creatQueenMap() {
+  public static byte[][] createQueenMap() {
     byte[][] map = createEmptyMap();
 
     for (byte field = 0; field < 64; field++) {
