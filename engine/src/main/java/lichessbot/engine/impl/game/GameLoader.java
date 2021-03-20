@@ -1,4 +1,6 @@
-package lichessbot.engine.impl;
+package lichessbot.engine.impl.game;
+
+import lichessbot.engine.impl.common.BitBoardFactory;
 
 public class GameLoader {
 

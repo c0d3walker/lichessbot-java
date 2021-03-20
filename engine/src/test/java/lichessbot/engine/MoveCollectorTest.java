@@ -6,9 +6,9 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import lichessbot.engine.impl.GameLoader;
-import lichessbot.engine.impl.MoveCollector;
-import lichessbot.engine.impl.Position;
+import lichessbot.engine.impl.game.GameLoader;
+import lichessbot.engine.impl.game.MoveCollector;
+import lichessbot.engine.impl.game.Position;
 
 public class MoveCollectorTest {
 

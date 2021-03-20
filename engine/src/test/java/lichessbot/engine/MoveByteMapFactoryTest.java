@@ -4,8 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
 
-import lichessbot.engine.impl.BitBoardFactory;
-import lichessbot.engine.impl.MoveByteMapFactory;
+import lichessbot.engine.impl.common.BitBoardFactory;
+import lichessbot.engine.impl.common.MoveByteMapFactory;
 
 public class MoveByteMapFactoryTest {
 

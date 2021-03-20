@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import lichessbot.engine.impl.BitBoardFactory;
+import lichessbot.engine.impl.common.BitBoardFactory;
 
 public class BitBoardFactoryTest {
 

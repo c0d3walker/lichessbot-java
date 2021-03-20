@@ -1,6 +1,6 @@
-package lichessbot.engine.impl;
+package lichessbot.engine.impl.common;
 
-import static lichessbot.engine.impl.BitBoardFactory.GeneralUsage.createEmptyBitboard;
+import static lichessbot.engine.impl.common.BitBoardFactory.GeneralUsage.createEmptyBitboard;
 
 /**
  * This class creates the bitboards used for representing the game board. The

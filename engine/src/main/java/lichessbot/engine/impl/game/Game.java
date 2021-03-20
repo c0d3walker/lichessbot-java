@@ -1,18 +1,21 @@
-package lichessbot.engine.impl;
+package lichessbot.engine.impl.game;
 
 import java.util.List;
 
 import lichessbot.engine.IGame;
+import lichessbot.engine.IMoveEvaluator;
 import lichessbot.engine.IStatus;
+import lichessbot.engine.impl.common.FieldConverter;
+import lichessbot.engine.impl.common.Status;
 
 public class Game implements IGame {
 
   private Position _position;
-  private int _aheadMoves;
+  IMoveEvaluator _moveEvaluator;
 
-  public Game(Position position, int aheadMoves) {
+  public Game(Position position, IMoveEvaluator moveEvaluator) {
     _position = position;
-    _aheadMoves = aheadMoves;
+    _moveEvaluator = moveEvaluator;
   }
 
   @Override
@@ -20,7 +23,7 @@ public class Game implements IGame {
     boolean isWhite = MetaDataBitboard.isWhiteTurn(_position.getMetaDataBitboard());
 
     List<String> moves = MoveCollector.collectAllPossibleMoves(_position, isWhite);
-    return new Status(false, "Not implemented", "");
+    return _moveEvaluator.evaluateAndFindBestMove(moves);
   }
 
   @Override

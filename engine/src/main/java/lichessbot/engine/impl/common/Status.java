@@ -1,4 +1,4 @@
-package lichessbot.engine.impl;
+package lichessbot.engine.impl.common;
 
 import lichessbot.engine.IStatus;
 

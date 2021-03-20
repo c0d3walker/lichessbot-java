@@ -1,4 +1,4 @@
-package lichessbot.engine.impl;
+package lichessbot.engine.impl.common;
 
 public class FieldConverter {
 
