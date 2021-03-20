@@ -23,18 +23,18 @@ public class Game implements IGame {
     boolean isWhite = MetaDataBitboard.isWhiteTurn(_position.getMetaDataBitboard());
 
     List<String> moves = MoveCollector.collectAllPossibleMoves(_position, isWhite);
-    return _moveEvaluator.evaluateAndFindBestMove(moves);
+    return _moveEvaluator.evaluateAndFindBestMove(_position, moves);
   }
 
   @Override
   public IStatus executeMove(String move) {
     int fromField = FieldConverter.toIndex(move.substring(0, 1));
     int toField = FieldConverter.toIndex(move.substring(2, 3));
-    IStatus updateFigureData = updateFigureData(fromField, toField);
-    if (updateFigureData.isOK()) {
+    IStatus updateFigureDataStatus = updateFigureData(fromField, toField);
+    if (updateFigureDataStatus.isOK()) {
       updatePlayerData(fromField, toField);
     }
-    return new Status(false, "Not implemented", "");
+    return updateFigureDataStatus;
   }
 
   private IStatus updateFigureData(int fromField, int toField) {

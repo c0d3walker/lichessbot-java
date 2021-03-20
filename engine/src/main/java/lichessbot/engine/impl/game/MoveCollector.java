@@ -19,7 +19,7 @@ public class MoveCollector {
   private static final byte[][] QUEEN_MOVE_MAP = MoveByteMapFactory.createQueenMap();
 
   public static List<String> collectAllPossibleMoves(Position position, boolean isWhite) {
-    boolean[] gameField = getGameField(position);
+    boolean[] gameField = GameLoader.getGameField(position);
     List<String> moves = new ArrayList<>();
     boolean[] whiteBitboard = position.getWhiteBitboard();
     moves.addAll(collectKnightMoves(position, isWhite, gameField, whiteBitboard));
@@ -155,16 +155,6 @@ public class MoveCollector {
       }
     }
     return startFields;
-  }
-
-  private static boolean[] getGameField(Position position) {
-    return BitBoardFactory.GeneralUsage.merge(//
-        position.getPawnBitboard(), //
-        position.getCastelBitboard(), //
-        position.getKnightBitboard(), //
-        position.getBishopBitboard(), //
-        position.getKingBitboard(), //
-        position.getQueenBitboard());
   }
 
 }

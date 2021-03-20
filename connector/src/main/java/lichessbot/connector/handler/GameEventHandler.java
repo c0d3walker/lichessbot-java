@@ -32,7 +32,7 @@ public class GameEventHandler implements Runnable {
         "Number of calculate-ahead moves. Taking 1 moves ahead in " + WAIT_FOR_AHEAD_MOVE_NUMBER + " seconds.");
     int aheadMoves = getNumberOfLookAheadMoves();
     Communication.sendChat(_bearerToken, _gameID, "I'll calculate " + aheadMoves + " moves ahead");
-    IGame createGame = GameFactory.createGame(aheadMoves);
+    IGame createGame = GameFactory.createAntichessGame(aheadMoves);
   }
 
   private int getNumberOfLookAheadMoves() {

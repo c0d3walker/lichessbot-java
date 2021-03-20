@@ -66,6 +66,16 @@ public class GameLoader {
     markAsWhiteFigure(position, field, isWhite);
   }
 
+  public static boolean[] getGameField(Position position) {
+    return BitBoardFactory.GeneralUsage.merge(//
+        position.getPawnBitboard(), //
+        position.getCastelBitboard(), //
+        position.getKnightBitboard(), //
+        position.getBishopBitboard(), //
+        position.getKingBitboard(), //
+        position.getQueenBitboard());
+  }
+  
   private static void markAsWhiteFigure(Position position, int field, boolean isWhite) {
     if (isWhite) {
       position.getWhiteBitboard()[field] = true;
