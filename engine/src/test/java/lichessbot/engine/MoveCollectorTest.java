@@ -17,9 +17,9 @@ public class MoveCollectorTest {
     Position position = GameLoader.createEmptyPosition();
     GameLoader.setPawn(position, 10, true);
     List<String> moves = MoveCollector.collectAllPossibleMoves(position, true);
-    assertThat(moves).containsExactlyInAnyOrder("c2c3","c2c4");
+    assertThat(moves).containsExactlyInAnyOrder("c2c3", "c2c4");
   }
-  
+
   @Test
   void testMoveCollector_pawn_take() {
     Position position = GameLoader.createEmptyPosition();
@@ -29,7 +29,7 @@ public class MoveCollectorTest {
     List<String> moves = MoveCollector.collectAllPossibleMoves(position, true);
     assertThat(moves).containsExactlyInAnyOrder("d2c3");
   }
-  
+
   @Test
   void testMoveCollector_pawn_singleMove() {
     Position position = GameLoader.createEmptyPosition();
@@ -37,7 +37,7 @@ public class MoveCollectorTest {
     List<String> moves = MoveCollector.collectAllPossibleMoves(position, true);
     assertThat(moves).containsExactly("c3c4");
   }
-  
+
   @Test
   void testMoveCollector_pawn_blockedDoubleJump() {
     Position position = GameLoader.createEmptyPosition();
@@ -46,7 +46,7 @@ public class MoveCollectorTest {
     List<String> moves = MoveCollector.collectAllPossibleMoves(position, true);
     assertThat(moves).isEmpty();
   }
-  
+
   @Test
   void testMoveCollector_knight() {
     Position position = GameLoader.createEmptyPosition();
@@ -54,20 +54,20 @@ public class MoveCollectorTest {
     GameLoader.setBishop(position, 42, false);
     GameLoader.setQueen(position, 33, true);
     List<String> moves = MoveCollector.collectAllPossibleMoves(position, true);
-    assertThat(moves).containsExactlyInAnyOrder("d4b3","d4c2","d4e2","d4f3","d4f5","d4e6","d4c6");
+    assertThat(moves).containsExactlyInAnyOrder("d4b3", "d4c2", "d4e2", "d4f3", "d4f5", "d4e6", "d4c6");
   }
-  
+
   @Test
   void testMoveCollector_king() {
     Position position = GameLoader.createEmptyPosition();
     GameLoader.setKing(position, 63, true);
-    GameLoader.setBishop(position,54, false);
+    GameLoader.setBishop(position, 54, false);
     GameLoader.setPawn(position, 55, true);
     List<String> moves = MoveCollector.collectAllPossibleMoves(position, true);
-    assertThat(moves).containsExactlyInAnyOrder("h8g8","h8g7");
-    
+    assertThat(moves).containsExactlyInAnyOrder("h8g8", "h8g7");
+
   }
-  
+
   @Test
   void testMoveCollector_castle() {
     Position position = GameLoader.createEmptyPosition();
@@ -76,7 +76,7 @@ public class MoveCollectorTest {
     GameLoader.setCastel(position, 11, false);
 
     List<String> moves = MoveCollector.collectAllPossibleMoves(position, true);
-    assertThat(moves).containsExactlyInAnyOrder("c2b2", "c2a2", "c2c1", "c2c3", "c2,c4", "c2c5");
+    assertThat(moves).containsExactlyInAnyOrder("c2b2", "c2a2", "c2d2", "c2c1", "c2c3", "c2c4", "c2c5");
   }
 
 }

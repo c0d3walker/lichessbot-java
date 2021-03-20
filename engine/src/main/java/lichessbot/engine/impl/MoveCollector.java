@@ -10,6 +10,7 @@ public class MoveCollector {
   private static final boolean[][] KNIGHT_MOVE_MAP = BitBoardFactory.FigureMovementBitboard.createKnightMovementBitboard();
   private static final boolean[][] KING_MOVE_MAP = BitBoardFactory.FigureMovementBitboard.createKingMovementBitboard();
   private static final boolean[][] PAWN_MOVE_MAP = BitBoardFactory.FigureMovementBitboard.createPawnMovementBitboard();
+  private static final byte[][] CASTEL_MOVE_MAP = MoveByteMapFactory.createCastleMap();
 
   public static List<String> collectAllPossibleMoves(Position position, boolean isWhite) {
     boolean[] gameField = getGameField(position);
@@ -18,6 +19,38 @@ public class MoveCollector {
     moves.addAll(collectKnightMoves(position, isWhite, gameField, whiteBitboard));
     moves.addAll(collectKingMoves(position, isWhite, gameField, whiteBitboard));
     moves.addAll(collectPawnMoves(position, isWhite, gameField, whiteBitboard));
+    moves.addAll(collectCastelMoves(position, isWhite, gameField, whiteBitboard));
+    return moves;
+  }
+
+  private static Collection<? extends String> collectCastelMoves(Position position, boolean isWhite, boolean[] gameField, boolean[] whiteBitboard) {
+    boolean[] castelBitboard = position.getCastelBitboard();
+    List<Integer> figuresForPlayer = findFiguresForPlayer(isWhite, whiteBitboard, castelBitboard);
+    return findCastelMoves(isWhite, whiteBitboard, gameField, figuresForPlayer);
+  }
+
+  private static Collection<? extends String> findCastelMoves(boolean isWhite, boolean[] whiteBitboard, boolean[] gameField, List<Integer> figuresForPlayer) {
+    List<String> moves = new ArrayList<>();
+    for (int figure : figuresForPlayer) {
+      byte[] movementMap = CASTEL_MOVE_MAP[figure];
+      boolean executeCheck = true;
+      for (int targetField : movementMap) {
+        if (targetField == -1) {
+          executeCheck = true;
+        } else if (executeCheck) {
+          if (!gameField[targetField]) {
+            moves.add(createMove(figure, targetField));
+          } else {
+            if (!Objects.equals(whiteBitboard[targetField], isWhite)) {
+              moves.add(createMove(figure, targetField));
+            }
+            executeCheck = false;
+          }
+        }
+
+      }
+    }
+
     return moves;
   }
 
