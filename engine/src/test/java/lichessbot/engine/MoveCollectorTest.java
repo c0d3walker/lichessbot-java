@@ -37,6 +37,14 @@ public class MoveCollectorTest {
     List<String> moves = MoveCollector.collectAllPossibleMoves(position, true);
     assertThat(moves).containsExactly("c3c4");
   }
+  
+  @Test
+  void testMoveCollector_blackPawn_doubleJump() {
+    Position position = GameLoader.createEmptyPosition();
+    GameLoader.setPawn(position, 54, false);
+    List<String> moves = MoveCollector.collectAllPossibleMoves(position, false);
+    assertThat(moves).containsExactly("g7g6","g7g5");
+  }
 
   @Test
   void testMoveCollector_pawn_blockedDoubleJump() {
@@ -95,7 +103,8 @@ public class MoveCollectorTest {
     GameLoader.setPawn(position, 25, false);
     GameLoader.setCastel(position, 28, false);
     List<String> moves = MoveCollector.collectAllPossibleMoves(position, true);
-    assertThat(moves).containsExactlyInAnyOrder("c4c5", "c4c6", "c4c7", "c4c8", "c4c3", "c4c2", "c4c1", "c4b4", "c4e4", "c4d4", "c4a2", "c4b3", "c4d5", "c4e6", "c4f7", "c4g8",
+    assertThat(moves).containsExactlyInAnyOrder("c4c5", "c4c6", "c4c7", "c4c8", "c4c3", "c4c2", "c4c1", "c4b4", "c4e4",
+        "c4d4", "c4a2", "c4b3", "c4d5", "c4e6", "c4f7", "c4g8",
         "c4a6", "c4b5", "c4d3", "c4e2", "c4f1");
   }
 
