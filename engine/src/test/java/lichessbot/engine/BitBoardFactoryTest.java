@@ -90,7 +90,7 @@ public class BitBoardFactoryTest {
 
   @Test
   public void testPawnMovementBitboard() {
-    boolean[][] pawnMovementBitboard = BitBoardFactory.FigureMovementBitboard.createPawnMovementBitboard();
+    boolean[][] pawnMovementBitboard = BitBoardFactory.FigureMovementBitboard.createWhitePawnMovementBitboard();
     boolean[] c4Bitboard = getAndAssertBitboard(pawnMovementBitboard, 26);
 
     List<Integer> expectedFields = Arrays.asList(34, 33, 35);
@@ -99,7 +99,7 @@ public class BitBoardFactoryTest {
 
   @Test
   public void testPawnMovementBitboard_initialMove() {
-    boolean[][] pawnMovementBitboard = BitBoardFactory.FigureMovementBitboard.createPawnMovementBitboard();
+    boolean[][] pawnMovementBitboard = BitBoardFactory.FigureMovementBitboard.createWhitePawnMovementBitboard();
     boolean[] c4Bitboard = getAndAssertBitboard(pawnMovementBitboard, 10);
 
     List<Integer> expectedFields = Arrays.asList(17, 18, 19, 26);

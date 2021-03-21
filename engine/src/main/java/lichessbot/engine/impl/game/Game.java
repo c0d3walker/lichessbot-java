@@ -21,7 +21,6 @@ public class Game implements IGame {
   @Override
   public IStatus getMove() {
     boolean isWhite = MetaDataBitboard.isWhiteTurn(_position.getMetaDataBitboard());
-
     List<String> moves = MoveCollector.collectAllPossibleMoves(_position, isWhite);
     return _moveEvaluator.evaluateAndFindBestMove(_position, moves);
   }
@@ -38,13 +37,12 @@ public class Game implements IGame {
   }
 
   private IStatus updateFigureData(int fromField, int toField) {
-    emptyField(_position, toField);
-    boolean isUpdatePending = !updateBitboard(_position.getPawnBitboard(), fromField, toField)//
-        && !updateBitboard(_position.getCastelBitboard(), fromField, toField)//
-        && !updateBitboard(_position.getKnightBitboard(), fromField, toField) //
-        && !updateBitboard(_position.getBishopBitboard(), fromField, toField) //
-        && !updateBitboard(_position.getKingBitboard(), fromField, toField) //
-        && !updateBitboard(_position.getQueenBitboard(), fromField, toField);
+    boolean isUpdatePending = !updateBitboard(_position,_position.getPawnBitboard(), fromField, toField)//
+        && !updateBitboard(_position,_position.getCastelBitboard(), fromField, toField)//
+        && !updateBitboard(_position,_position.getKnightBitboard(), fromField, toField) //
+        && !updateBitboard(_position,_position.getBishopBitboard(), fromField, toField) //
+        && !updateBitboard(_position,_position.getKingBitboard(), fromField, toField) //
+        && !updateBitboard(_position,_position.getQueenBitboard(), fromField, toField);
     if (isUpdatePending) {
       return new Status(false, "Move denied", "");
     }
@@ -60,10 +58,11 @@ public class Game implements IGame {
     position.getKingBitboard()[toField] = false;
   }
 
-  private boolean updateBitboard(boolean[] bitboard, int fromField, int toField) {
-    if (bitboard[fromField]) {
-      bitboard[fromField] = false;
-      bitboard[toField] = true;
+  private boolean updateBitboard(Position position,boolean[] figureBitboard, int fromField, int toField) {
+    if (figureBitboard[fromField]) {
+      emptyField(position, toField);
+      figureBitboard[fromField] = false;
+      figureBitboard[toField] = true;
       return true;
     }
     return false;

@@ -13,7 +13,8 @@ public class MoveCollector {
 
   private static final boolean[][] KNIGHT_MOVE_MAP = BitBoardFactory.FigureMovementBitboard.createKnightMovementBitboard();
   private static final boolean[][] KING_MOVE_MAP = BitBoardFactory.FigureMovementBitboard.createKingMovementBitboard();
-  private static final boolean[][] PAWN_MOVE_MAP = BitBoardFactory.FigureMovementBitboard.createPawnMovementBitboard();
+  private static final boolean[][] PAWN_MOVE_MAP = BitBoardFactory.FigureMovementBitboard.createWhitePawnMovementBitboard();
+  private static final boolean[][] BLACK_PAWN_MOVE_MAP = BitBoardFactory.FigureMovementBitboard.createBlackPawnMovementBitboard();
   private static final byte[][] CASTEL_MOVE_MAP = MoveByteMapFactory.createCastleMap();
   private static final byte[][] BISHOP_MOVE_MAP = MoveByteMapFactory.createBishopMap();
   private static final byte[][] QUEEN_MOVE_MAP = MoveByteMapFactory.createQueenMap();
@@ -84,7 +85,8 @@ public class MoveCollector {
     List<String> moves = new ArrayList<>();
     int moveDirection = isWhite ? 1 : -1;
     for (Integer figure : figuresForPlayer) {
-      boolean[] moveMap = PAWN_MOVE_MAP[figure];
+      boolean[] moveMap = isWhite ? PAWN_MOVE_MAP[figure] : BLACK_PAWN_MOVE_MAP[figure];
+
       int target = figure + moveDirection * 8;
       if (!gameField[target]) {
         moves.add(createMove(figure, target));
@@ -109,7 +111,7 @@ public class MoveCollector {
   }
 
   private static boolean canPawnTake(boolean isWhite, boolean[] whiteBitboard, boolean[] gameField, boolean[] moveMap, int target) {
-    return target >= 0 && target < 64 && gameField[target] && !Objects.equals(isWhite, whiteBitboard[target]);
+    return target >= 0 && target < 64 && moveMap[target] && gameField[target] && !Objects.equals(isWhite, whiteBitboard[target]);
   }
 
   private static String createMove(int fromField, int toField) {

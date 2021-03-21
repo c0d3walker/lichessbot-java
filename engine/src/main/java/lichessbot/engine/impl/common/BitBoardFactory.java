@@ -46,7 +46,7 @@ public class BitBoardFactory {
     public static boolean[] merge(boolean[]... bitboards) {
       boolean[] merged = copyBitboard(bitboards[0]);
       for (int fieldIndex = 0; fieldIndex < merged.length; fieldIndex++) {
-        for (int boardIndex = 1; !merged[fieldIndex]&&boardIndex<bitboards.length; boardIndex++) {
+        for (int boardIndex = 1; !merged[fieldIndex] && boardIndex < bitboards.length; boardIndex++) {
           merged[fieldIndex] = bitboards[boardIndex][fieldIndex];
         }
       }
@@ -129,14 +129,14 @@ public class BitBoardFactory {
   }
 
   public static class FigureMovementBitboard {
-    public static boolean[][] createPawnMovementBitboard() {
+    public static boolean[][] createWhitePawnMovementBitboard() {
       boolean[][] movementBitboards = new boolean[64][];
 
       // normal move behavior
       for (int fieldIndex = 8; fieldIndex <= 55; fieldIndex++) {
         movementBitboards[fieldIndex] = createEmptyBitboard();
-        movementBitboards[fieldIndex][fieldIndex+8] = true;
-        pawnTakeMoves(movementBitboards, fieldIndex);
+        movementBitboards[fieldIndex][fieldIndex + 8] = true;
+        calculateWhitePawnTakeMoves(movementBitboards, fieldIndex);
       }
       // double jump at beginning
       for (int fieldIndex = 8; fieldIndex <= 15; fieldIndex++) {
@@ -145,14 +145,42 @@ public class BitBoardFactory {
       return movementBitboards;
     }
 
-    private static void pawnTakeMoves(boolean[][] movementBitboards, int fieldIndex) {
+    private static void calculateWhitePawnTakeMoves(boolean[][] movementBitboards, int fieldIndex) {
       int takeLeft = fieldIndex + 7;
-      int column=getColumn(fieldIndex);
-      if (isInColumn(takeLeft, column-1)) {
+      int column = getColumn(fieldIndex);
+      if (isInColumn(takeLeft, column - 1)) {
         movementBitboards[fieldIndex][takeLeft] = true;
       }
       int takeRight = fieldIndex + 9;
-      if (isInColumn(takeRight, column+1)) {
+      if (isInColumn(takeRight, column + 1)) {
+        movementBitboards[fieldIndex][takeRight] = true;
+      }
+    }
+
+    public static boolean[][] createBlackPawnMovementBitboard() {
+      boolean[][] movementBitboards = new boolean[64][];
+
+      // normal move behavior
+      for (int fieldIndex = 55; fieldIndex >= 8; fieldIndex--) {
+        movementBitboards[fieldIndex] = createEmptyBitboard();
+        movementBitboards[fieldIndex][fieldIndex - 8] = true;
+        calculateBlackPawnTakeMoves(movementBitboards, fieldIndex);
+      }
+      // double jump at beginning
+      for (int fieldIndex = 48; fieldIndex <= 55; fieldIndex++) {
+        movementBitboards[fieldIndex][fieldIndex - 16] = true;
+      }
+      return movementBitboards;
+    }
+
+    private static void calculateBlackPawnTakeMoves(boolean[][] movementBitboards, int fieldIndex) {
+      int takeLeft = fieldIndex - 9;
+      int column = getColumn(fieldIndex);
+      if (isInColumn(takeLeft, column - 1)) {
+        movementBitboards[fieldIndex][takeLeft] = true;
+      }
+      int takeRight = fieldIndex - 7;
+      if (isInColumn(takeRight, column + 1)) {
         movementBitboards[fieldIndex][takeRight] = true;
       }
     }
@@ -186,6 +214,7 @@ public class BitBoardFactory {
     }
 
     private static int getColumn(int fieldIndex) {
+      fieldIndex = fieldIndex < 0 ? fieldIndex + 8 : fieldIndex;
       return fieldIndex % 8;
     }
 

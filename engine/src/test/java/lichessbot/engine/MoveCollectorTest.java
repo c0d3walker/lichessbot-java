@@ -45,6 +45,15 @@ public class MoveCollectorTest {
     List<String> moves = MoveCollector.collectAllPossibleMoves(position, false);
     assertThat(moves).containsExactlyInAnyOrder("g7g6","g7g5");
   }
+  
+  @Test
+  void testMoveCollector_blackPawn_takeInDifferentLines() {
+    Position position = GameLoader.createEmptyPosition();
+    GameLoader.setPawn(position, 31, true);
+    GameLoader.setPawn(position, 40, false);
+    List<String> moves = MoveCollector.collectAllPossibleMoves(position, false);
+    assertThat(moves).containsExactly("a6a5");
+  }
 
   @Test
   void testMoveCollector_pawn_blockedDoubleJump() {
