@@ -12,7 +12,7 @@ import lichessbot.engine.impl.common.BitBoardFactory;
 public class BitBoardFactoryTest {
 
   @Test
-  public void testMergeBitboard() {
+  void testMergeBitboard() {
     boolean[] bishopMovementBitboard = BitBoardFactory.FigureMovementBitboard.createBishopMovementBitboard()[35];
     boolean[] castelMovementBitboard = BitBoardFactory.FigureMovementBitboard.createCastelMovementBitboard()[35];
     boolean[] mergedBitboard = BitBoardFactory.GeneralUsage.merge(bishopMovementBitboard, castelMovementBitboard);
@@ -24,7 +24,7 @@ public class BitBoardFactoryTest {
   }
 
   @Test
-  public void testCloneBitboard() {
+  void testCloneBitboard() {
     boolean[] originalBitboard = BitBoardFactory.GeneralUsage.createEmptyBitboard();
     originalBitboard[4] = true;
     boolean[] copyBitboard = BitBoardFactory.GeneralUsage.copyBitboard(originalBitboard);
@@ -35,7 +35,7 @@ public class BitBoardFactoryTest {
   }
 
   @Test
-  public void testCreatedBitboard() {
+  void testCreatedBitboard() {
     boolean[] emptyBitboard = BitBoardFactory.GeneralUsage.createEmptyBitboard();
     for (boolean field : emptyBitboard) {
       assertThat(field).isEqualTo(false);
@@ -43,7 +43,7 @@ public class BitBoardFactoryTest {
   }
 
   @Test
-  public void testKingMovementBitboard() {
+  void testKingMovementBitboard() {
     boolean[][] kingMovementBitboard = BitBoardFactory.FigureMovementBitboard.createKingMovementBitboard();
     boolean[] bitboardForC4 = getAndAssertBitboard(kingMovementBitboard, 26);
 
@@ -52,7 +52,7 @@ public class BitBoardFactoryTest {
   }
 
   @Test
-  public void testCastleMovmentBitboard() {
+  void testCastleMovmentBitboard() {
     boolean[][] castleMovementBitboard = BitBoardFactory.FigureMovementBitboard.createCastelMovementBitboard();
     boolean[] c4Bitboard = getAndAssertBitboard(castleMovementBitboard, 26);
 
@@ -61,7 +61,7 @@ public class BitBoardFactoryTest {
   }
 
   @Test
-  public void testKnightMovmentBitboard() {
+  void testKnightMovmentBitboard() {
     boolean[][] knigtMovementBitboard = BitBoardFactory.FigureMovementBitboard.createKnightMovementBitboard();
     boolean[] c4Bitboard = getAndAssertBitboard(knigtMovementBitboard, 26);
 
@@ -70,7 +70,7 @@ public class BitBoardFactoryTest {
   }
 
   @Test
-  public void testBishopMovementBitboard() {
+  void testBishopMovementBitboard() {
     boolean[][] bishopMovementBitboard = BitBoardFactory.FigureMovementBitboard.createBishopMovementBitboard();
     boolean[] c4Bitboard = getAndAssertBitboard(bishopMovementBitboard, 26);
 
@@ -79,17 +79,16 @@ public class BitBoardFactoryTest {
   }
 
   @Test
-  public void testQueenMovementBitboard() {
+  void testQueenMovementBitboard() {
     boolean[][] bishopMovementBitboard = BitBoardFactory.FigureMovementBitboard.createQueenMovementBitboard();
     boolean[] c4Bitboard = getAndAssertBitboard(bishopMovementBitboard, 26);
 
-    List<Integer> expectedFields = Arrays.asList(19, 12, 5, 8, 17, 40, 33, 35, 44, 53, 62, 24, 25, 27, 28, 29, 30, 31,
-        2, 10, 18, 34, 42, 50, 58);
+    List<Integer> expectedFields = Arrays.asList(19, 12, 5, 8, 17, 40, 33, 35, 44, 53, 62, 24, 25, 27, 28, 29, 30, 31, 2, 10, 18, 34, 42, 50, 58);
     assertMoveFields(c4Bitboard, expectedFields);
   }
 
   @Test
-  public void testPawnMovementBitboard() {
+  void testPawnMovementBitboard() {
     boolean[][] pawnMovementBitboard = BitBoardFactory.FigureMovementBitboard.createWhitePawnMovementBitboard();
     boolean[] c4Bitboard = getAndAssertBitboard(pawnMovementBitboard, 26);
 
@@ -98,7 +97,7 @@ public class BitBoardFactoryTest {
   }
 
   @Test
-  public void testPawnMovementBitboard_initialMove() {
+  void testPawnMovementBitboard_initialMove() {
     boolean[][] pawnMovementBitboard = BitBoardFactory.FigureMovementBitboard.createWhitePawnMovementBitboard();
     boolean[] c4Bitboard = getAndAssertBitboard(pawnMovementBitboard, 10);
 

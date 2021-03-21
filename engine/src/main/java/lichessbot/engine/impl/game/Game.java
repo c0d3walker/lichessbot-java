@@ -1,6 +1,7 @@
 package lichessbot.engine.impl.game;
 
 import java.util.List;
+import java.util.Objects;
 
 import lichessbot.engine.IGame;
 import lichessbot.engine.IMoveEvaluator;
@@ -37,12 +38,12 @@ public class Game implements IGame {
   }
 
   private IStatus updateFigureData(int fromField, int toField) {
-    boolean isUpdatePending = !updateBitboard(_position,_position.getPawnBitboard(), fromField, toField)//
-        && !updateBitboard(_position,_position.getCastelBitboard(), fromField, toField)//
-        && !updateBitboard(_position,_position.getKnightBitboard(), fromField, toField) //
-        && !updateBitboard(_position,_position.getBishopBitboard(), fromField, toField) //
-        && !updateBitboard(_position,_position.getKingBitboard(), fromField, toField) //
-        && !updateBitboard(_position,_position.getQueenBitboard(), fromField, toField);
+    boolean isUpdatePending = !updateBitboard(_position, _position.getPawnBitboard(), fromField, toField)//
+        && !updateBitboard(_position, _position.getCastelBitboard(), fromField, toField)//
+        && !updateBitboard(_position, _position.getKnightBitboard(), fromField, toField) //
+        && !updateBitboard(_position, _position.getBishopBitboard(), fromField, toField) //
+        && !updateBitboard(_position, _position.getKingBitboard(), fromField, toField) //
+        && !updateBitboard(_position, _position.getQueenBitboard(), fromField, toField);
     if (isUpdatePending) {
       return new Status(false, "Move denied", "");
     }
@@ -58,8 +59,8 @@ public class Game implements IGame {
     position.getKingBitboard()[toField] = false;
   }
 
-  private boolean updateBitboard(Position position,boolean[] figureBitboard, int fromField, int toField) {
-    if (figureBitboard[fromField]) {
+  private boolean updateBitboard(Position position, boolean[] figureBitboard, int fromField, int toField) {
+    if (figureBitboard[fromField] && Objects.equals(MetaDataBitboard.isWhiteTurn(position.getMetaDataBitboard()), position.getWhiteBitboard()[fromField])) {
       emptyField(position, toField);
       figureBitboard[fromField] = false;
       figureBitboard[toField] = true;
