@@ -43,7 +43,7 @@ public class MoveCollectorTest {
     Position position = GameLoader.createEmptyPosition();
     GameLoader.setPawn(position, 54, false);
     List<String> moves = MoveCollector.collectAllPossibleMoves(position, false);
-    assertThat(moves).containsExactly("g7g6","g7g5");
+    assertThat(moves).containsExactlyInAnyOrder("g7g6","g7g5");
   }
 
   @Test
@@ -53,6 +53,15 @@ public class MoveCollectorTest {
     GameLoader.setPawn(position, 19, false);
     List<String> moves = MoveCollector.collectAllPossibleMoves(position, true);
     assertThat(moves).isEmpty();
+  }
+  
+  @Test
+  void testMoveCollector__blackPawn_take() {
+    Position position = GameLoader.createEmptyPosition();
+    GameLoader.setPawn(position, 30, true);
+    GameLoader.setPawn(position, 37, false);
+    List<String> moves = MoveCollector.collectAllPossibleMoves(position, false);
+    assertThat(moves).containsExactlyInAnyOrder("f5g4","f5f4");
   }
 
   @Test

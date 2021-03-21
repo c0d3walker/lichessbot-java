@@ -57,7 +57,7 @@ public class GameEventHandler implements Runnable {
             if (game == null) {
               game = setupGame(aheadMoves, gameStatusString);
             } else {
-              applyChange(game, gameStatusString);
+              shallDisconnect =applyChange(game, gameStatusString);
             }
             if (_isMyTurn) {
               IStatus moveStatus = game.getMove();
@@ -91,7 +91,7 @@ public class GameEventHandler implements Runnable {
     }
   }
 
-  private void applyChange(IGame game, String gameStatusString) {
+  private boolean applyChange(IGame game, String gameStatusString) {
     JsonReader statusReader = Json.createReader(new StringReader(gameStatusString));
     JsonObject statusObject = statusReader.readObject();
     String statusType = statusObject.getString("type");
@@ -101,6 +101,7 @@ public class GameEventHandler implements Runnable {
       game.executeMove(lastMove);
       _isMyTurn = !_isMyTurn;
     }
+    return !"started".equals(statusObject.getString("status"));
   }
 
   private IGame setupGame(int aheadMoves, String gameStatusString) {

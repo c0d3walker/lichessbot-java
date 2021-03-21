@@ -109,7 +109,7 @@ public class MoveCollector {
   }
 
   private static boolean canPawnTake(boolean isWhite, boolean[] whiteBitboard, boolean[] gameField, boolean[] moveMap, int target) {
-    return target >= 0 && target < 64 && moveMap[target] && gameField[target] && !Objects.equals(isWhite, whiteBitboard[target]);
+    return target >= 0 && target < 64 && gameField[target] && !Objects.equals(isWhite, whiteBitboard[target]);
   }
 
   private static String createMove(int fromField, int toField) {

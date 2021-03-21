@@ -54,9 +54,9 @@ public class CommonEventHandler implements Runnable {
 
   private void handleGameStart(JsonObject currentEvent) {
     JsonObject typeObject = currentEvent.getJsonObject("game");
-    String id = typeObject.getString("id");
-    GameEventHandler gameEventHandler = new GameEventHandler(_bearerToken, id);
-    new Thread(gameEventHandler).start();
+    String gameID = typeObject.getString("id");
+    Runnable gameEventHandler = new GameEventHandler(_bearerToken, gameID);
+    HandlerEnvironment.invokeInThread(gameEventHandler, "Game " + gameID);
 
   }
 

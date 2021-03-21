@@ -27,9 +27,7 @@ public class ContinueGamesHandler implements Runnable {
       for (int gameIndex = 0; gameIndex < gameArray.size(); gameIndex++) {
         JsonObject game = gameArray.getJsonObject(gameIndex);
         String gameID = game.getString("gameId");
-        if ("HCIXqIxk".equals(gameID)) {
-          continueGame(gameID);
-        }
+        continueGame(gameID);
       }
     }
   }
