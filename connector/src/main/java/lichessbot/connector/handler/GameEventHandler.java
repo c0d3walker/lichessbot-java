@@ -47,25 +47,20 @@ public class GameEventHandler implements Runnable {
       connection = (HttpsURLConnection) url.openConnection();
       connection.setRequestProperty("Authorization", "Bearer " + _bearerToken);
       connection.setDoOutput(true);
-      boolean shallDisconnect = false;
       IGame game = null;
 
       try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
-        while (!shallDisconnect) {
-          String gameStatusString = reader.readLine();
+        String gameStatusString = null;
+        while ((gameStatusString = reader.readLine()) != null) {
           if (!gameStatusString.isEmpty()) {
+            JsonObject statusObject =createStatusObject(gameStatusString);
             if (game == null) {
-              game = setupGame(aheadMoves, gameStatusString);
+              game = setupGame(aheadMoves, statusObject);
             } else {
-              shallDisconnect =applyChange(game, gameStatusString);
+              applyChange(game, statusObject);
             }
-            if (_isMyTurn) {
-              IStatus moveStatus = game.getMove();
-              String move = moveStatus.getAdditionalInformation();
-              boolean isMoveSet = Communication.setMove(_bearerToken, _gameID, move);
-              if (!isMoveSet) {
-                System.err.println("Error occurred during executing move:" + move + (_isWhite ? " white" : "black"));
-              }
+            if (!isFinished(statusObject)) {
+              executeMoveIfNeccesary(game);
             }
           }
           checkConnection(connection);
@@ -77,6 +72,25 @@ public class GameEventHandler implements Runnable {
       connection.disconnect();
     }
 
+  }
+
+  private JsonObject createStatusObject(String gameStatusString) {
+    JsonReader statusReader = Json.createReader(new StringReader(gameStatusString));
+    return statusReader.readObject();
+  }
+
+  private boolean isFinished(JsonObject statusObject) {
+    return !"started".equals(statusObject.getString("status"));  }
+
+  private void executeMoveIfNeccesary(IGame game) {
+    if (_isMyTurn) {
+      IStatus moveStatus = game.getMove();
+      String move = moveStatus.getAdditionalInformation();
+      boolean isMoveSet = Communication.setMove(_bearerToken, _gameID, move);
+      if (!isMoveSet) {
+        System.err.println("Error occurred during executing move:" + move + (_isWhite ? " white" : "black"));
+      }
+    }
   }
 
   private void checkConnection(HttpsURLConnection connection) throws IOException {
@@ -91,9 +105,7 @@ public class GameEventHandler implements Runnable {
     }
   }
 
-  private boolean applyChange(IGame game, String gameStatusString) {
-    JsonReader statusReader = Json.createReader(new StringReader(gameStatusString));
-    JsonObject statusObject = statusReader.readObject();
+  private void applyChange(IGame game, JsonObject statusObject) {
     String statusType = statusObject.getString("type");
     if (statusType.equals("gameState")) {
       String moves = statusObject.getString("moves");
@@ -101,12 +113,9 @@ public class GameEventHandler implements Runnable {
       game.executeMove(lastMove);
       _isMyTurn = !_isMyTurn;
     }
-    return !"started".equals(statusObject.getString("status"));
   }
 
-  private IGame setupGame(int aheadMoves, String gameStatusString) {
-    JsonReader statusReader = Json.createReader(new StringReader(gameStatusString));
-    JsonObject statusObject = statusReader.readObject();
+  private IGame setupGame(int aheadMoves, JsonObject statusObject) {
     JsonObject whitePlayer = statusObject.getJsonObject("white");
     String whitePlayerName = whitePlayer.getString("name");
     _isWhite = whitePlayerName.equals(System.getProperty(ILichessbotConstants.BOTNAME));
