@@ -26,7 +26,7 @@ public class Lichessbot {
     HandlerEnvironment.invokeInThread(continueGamesHandler, "Continue Game Handler");
 
     CommonEventHandler commonEventHandler = new CommonEventHandler(bearerToken);
-//		HandlerEnvironment.invokeInThread(commonEventHandler, "Common Event Handler");
+		HandlerEnvironment.invokeInThread(commonEventHandler, "Common Event Handler");
 
   }
 
