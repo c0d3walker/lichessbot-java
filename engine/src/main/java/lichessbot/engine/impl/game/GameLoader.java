@@ -29,6 +29,19 @@ public class GameLoader {
     position.setMetaDataBitboard(createDefaultMetaData());
     return position;
   }
+  
+  public static Position clonePosition(Position other) {
+    Position position=new Position();
+    position.setPawnBitBoard(BitBoardFactory.GeneralUsage.copyBitboard(other.getPawnBitboard()));
+    position.setCastelBitBoard(BitBoardFactory.GeneralUsage.copyBitboard(other.getCastelBitboard()));
+    position.setKnightBitBoard(BitBoardFactory.GeneralUsage.copyBitboard(other.getKnightBitboard()));
+    position.setBishopBitBoard(BitBoardFactory.GeneralUsage.copyBitboard(other.getBishopBitboard()));
+    position.setQueenBitBoard(BitBoardFactory.GeneralUsage.copyBitboard(other.getQueenBitboard()));
+    position.setKingBitBoard(BitBoardFactory.GeneralUsage.copyBitboard(other.getKingBitboard()));
+    position.setWhiteBitBoard(BitBoardFactory.GeneralUsage.copyBitboard(other.getWhiteBitboard()));
+    position.setMetaDataBitboard(BitBoardFactory.GeneralUsage.copyBitboard(other.getMetaDataBitboard()));
+    return position;
+  }
 
   private static boolean[] createDefaultMetaData() {
     boolean[] metaDataBitboard = BitBoardFactory.GeneralUsage.createEmptyBitboard();
