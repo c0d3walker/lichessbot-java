@@ -11,14 +11,16 @@ public class SpecialMoveUtility {
 
   public static boolean isAuPassant(Position position, int fromField, int toField) {
     boolean[] pawnBitboard = position.getPawnBitboard();
-    if (pawnBitboard[fromField]) {
+    boolean isWhite = MetaDataBitboard.isWhiteTurn(position.getMetaDataBitboard());
+    int auPassantRow = isWhite ? 4 : 3;
+    if (pawnBitboard[fromField] && fromField / 8 == auPassantRow) {
       int auPassantColumn = findAuPassantColumn(position, pawnBitboard);
       return toField % 8 == auPassantColumn;
     }
     return false;
   }
 
-  public static int findAuPassantColumn(Position position, boolean[] pawnBitboard) {
+  private static int findAuPassantColumn(Position position, boolean[] pawnBitboard) {
     String lastMove = MetaDataBitboard.getLastMove(position.getMetaDataBitboard());
     if (PAWN_MOVE_PATTERN.matcher(lastMove).matches()) {
       int target = FieldConverter.toIndex(lastMove.substring(2, 4));
