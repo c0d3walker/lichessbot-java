@@ -9,6 +9,7 @@ import java.util.Set;
 import lichessbot.engine.IMoveEvaluator;
 import lichessbot.engine.IStatus;
 import lichessbot.engine.impl.common.FieldConverter;
+import lichessbot.engine.impl.common.SpecialMoveUtility;
 import lichessbot.engine.impl.common.Status;
 import lichessbot.engine.impl.game.GameLoader;
 import lichessbot.engine.impl.game.MetaDataBitboard;
@@ -54,15 +55,21 @@ public class Antichess implements IMoveEvaluator {
 
     boolean[] gameField = GameLoader.getGameField(position);
     for (String move : moves) {
+      String from = move.substring(0,2);
       String to = move.substring(2);
-      int field = FieldConverter.toIndex(to);
-      if (gameField[field]) {
+      int toField = FieldConverter.toIndex(to);
+      int fromField=FieldConverter.toIndex(from);
+      if (isTakeMove(position,gameField, fromField,toField)) {
         map.put(move, 1.);
       } else {
         map.put(move, 0.);
       }
     }
     return map;
+  }
+
+  private boolean isTakeMove(Position position, boolean[] gameField, int fromField, int toField) {
+    return gameField[toField]||SpecialMoveUtility.isAuPassant(position,fromField,toField);
   }
 
 }
