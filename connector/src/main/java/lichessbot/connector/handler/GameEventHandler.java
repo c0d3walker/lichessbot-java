@@ -53,7 +53,7 @@ public class GameEventHandler implements Runnable {
         String gameStatusString = null;
         while ((gameStatusString = reader.readLine()) != null) {
           if (!gameStatusString.isEmpty()) {
-            JsonObject statusObject =createStatusObject(gameStatusString);
+            JsonObject statusObject = createStatusObject(gameStatusString);
             if (game == null) {
               game = setupGame(aheadMoves, statusObject);
             } else {
@@ -80,7 +80,13 @@ public class GameEventHandler implements Runnable {
   }
 
   private boolean isFinished(JsonObject statusObject) {
-    return !"started".equals(statusObject.getString("status"));  }
+    JsonObject stateObject = statusObject.getJsonObject("state");
+    if (stateObject != null) {
+      return !"started".equals(stateObject.getString("status"));
+    }
+    return !"started".equals(statusObject.getString("status"));
+
+  }
 
   private void executeMoveIfNeccesary(IGame game) {
     if (_isMyTurn) {
