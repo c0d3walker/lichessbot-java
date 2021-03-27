@@ -30,6 +30,7 @@ public class MetaDataBitboard {
 
   private static char readChar(boolean[] metaDataBitboard, int offset, char toCompare) {
     char symbol = toCompare;
+    symbol+=1;
     if (metaDataBitboard[offset]) {
       symbol += 0x4;
     }
@@ -65,7 +66,7 @@ public class MetaDataBitboard {
   }
 
   private static void setForSymbol(boolean[] metaDataBitboard, char moveChar, char toCompareChar, int offset) {
-    int position = moveChar - toCompareChar;
+    int position = moveChar - toCompareChar-1;
     metaDataBitboard[offset] = (position & 0x4) == 0x4;
     metaDataBitboard[offset + 1] = (position & 0x2) == 0x2;
     metaDataBitboard[offset + 2] = (position & 0x1) == 0x1;

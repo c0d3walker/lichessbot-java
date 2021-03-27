@@ -12,12 +12,49 @@ public class MoveExecutor {
   public static IStatus execute(Position position, String move) {
     int fromField = FieldConverter.toIndex(move.substring(0, 2));
     int toField = FieldConverter.toIndex(move.substring(2, 4));
-    IStatus updateFigureDataStatus = updateFigureData(position, fromField, toField);
+    IStatus updateFigureDataStatus = null;
+    if (move.length() == 4) {
+      updateFigureDataStatus = updateFigureData(position, fromField, toField);
+    } else {
+      updateFigureDataStatus = handleComplexMove(position, move, fromField, toField);
+    }
     if (updateFigureDataStatus.isOK()) {
       updatePlayerData(position, fromField, toField);
       MetaDataBitboard.setLastMove(position.getMetaDataBitboard(), move);
     }
     return updateFigureDataStatus;
+  }
+
+  private static IStatus handleComplexMove(Position position, String move, int fromField, int toField) {
+    boolean[] pawnBitboard = position.getPawnBitboard();
+    if (pawnBitboard[fromField]) {
+      return transformPawn(position, pawnBitboard, move, fromField, toField);
+    }
+    return new Status(false, "not implemented yet", "");
+  }
+
+  private static IStatus transformPawn(Position position, boolean[] pawnBitboard, String move, int fromField, int toField) {
+    char newFigure = move.charAt(4);
+    pawnBitboard[fromField] = false;
+    boolean[] targetTypeBitboard = null;
+    switch (newFigure) {
+    case 'q':
+      targetTypeBitboard = position.getQueenBitboard();
+      break;
+    case 'b':
+      targetTypeBitboard = position.getQueenBitboard();
+      break;
+    case 'c':
+      targetTypeBitboard = position.getCastelBitboard();
+      break;
+    case 'k':
+      targetTypeBitboard = position.getKnightBitboard();
+      break;
+    default:
+      return new Status(false, "The given figure type is unknown", newFigure + "");
+    }
+    targetTypeBitboard[toField] = true;
+    return new Status(true, "The pawn was transformed successfully", "");
   }
 
   private static IStatus updateFigureData(Position position, int fromField, int toField) {
