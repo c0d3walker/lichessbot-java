@@ -14,6 +14,7 @@ public class MoveExecutor {
     IStatus updateFigureDataStatus = updateFigureData(position,fromField, toField);
     if (updateFigureDataStatus.isOK()) {
       updatePlayerData(position,fromField, toField);
+      MetaDataBitboard.setLastMove(position.getMetaDataBitboard(), move);
     }
     return updateFigureDataStatus;
   }

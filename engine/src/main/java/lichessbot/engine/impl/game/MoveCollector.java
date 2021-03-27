@@ -8,6 +8,7 @@ import java.util.Objects;
 import lichessbot.engine.impl.common.BitBoardFactory;
 import lichessbot.engine.impl.common.FieldConverter;
 import lichessbot.engine.impl.common.MoveByteMapFactory;
+import lichessbot.engine.impl.common.SpecialMoveUtility;
 
 public class MoveCollector {
 
@@ -79,23 +80,8 @@ public class MoveCollector {
     boolean[] pawnBitboard = position.getPawnBitboard();
     List<Integer> figuresForPlayer = findFiguresForPlayer(isWhite, whiteBitboard, pawnBitboard);
 
-    int auPassantColumn = findAuPassantColumn(position, pawnBitboard);
+    int auPassantColumn = SpecialMoveUtility.findAuPassantColumn(position, pawnBitboard);
     return findPawnMoves(isWhite, whiteBitboard, gameField, figuresForPlayer, auPassantColumn);
-  }
-
-  private static int findAuPassantColumn(Position position, boolean[] pawnBitboard) {
-    String lastMove = MetaDataBitboard.getLastMove(position.getMetaDataBitboard());
-    if (lastMove.matches("[a-h][1-8][a-h][1-8]+?")) {
-      int target = FieldConverter.toIndex(lastMove.substring(2, 4));
-      if (pawnBitboard[target]) {
-        int from = FieldConverter.toIndex(lastMove.substring(0, 2));
-        if (Math.abs(target - from) == 16) {
-          return target % 8;
-        }
-      }
-    }
-
-    return -2;
   }
 
   private static Collection<? extends String> findPawnMoves(boolean isWhite, boolean[] whiteBitboard, boolean[] gameField, List<Integer> figuresForPlayer, int auPassantColumn) {
