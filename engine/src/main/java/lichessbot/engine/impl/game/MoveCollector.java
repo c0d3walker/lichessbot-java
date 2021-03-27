@@ -78,10 +78,27 @@ public class MoveCollector {
   private static Collection<? extends String> collectPawnMoves(Position position, boolean isWhite, boolean[] gameField, boolean[] whiteBitboard) {
     boolean[] pawnBitboard = position.getPawnBitboard();
     List<Integer> figuresForPlayer = findFiguresForPlayer(isWhite, whiteBitboard, pawnBitboard);
-    return findPawnMoves(isWhite, whiteBitboard, gameField, figuresForPlayer);
+
+    int auPassantColumn = findAuPassantColumn(position, pawnBitboard);
+    return findPawnMoves(isWhite, whiteBitboard, gameField, figuresForPlayer, auPassantColumn);
   }
 
-  private static Collection<? extends String> findPawnMoves(boolean isWhite, boolean[] whiteBitboard, boolean[] gameField, List<Integer> figuresForPlayer) {
+  private static int findAuPassantColumn(Position position, boolean[] pawnBitboard) {
+    String lastMove = MetaDataBitboard.getLastMove(position.getMetaDataBitboard());
+    if (lastMove.matches("[a-h][1-8][a-h][1-8]+?")) {
+      int target = FieldConverter.toIndex(lastMove.substring(2, 4));
+      if (pawnBitboard[target]) {
+        int from = FieldConverter.toIndex(lastMove.substring(0, 2));
+        if (Math.abs(target - from) == 16) {
+          return target % 8;
+        }
+      }
+    }
+
+    return -2;
+  }
+
+  private static Collection<? extends String> findPawnMoves(boolean isWhite, boolean[] whiteBitboard, boolean[] gameField, List<Integer> figuresForPlayer, int auPassantColumn) {
     List<String> moves = new ArrayList<>();
     int moveDirection = isWhite ? 1 : -1;
     for (Integer figure : figuresForPlayer) {
@@ -98,11 +115,11 @@ public class MoveCollector {
         }
       }
       target = figure + moveDirection * 7;
-      if (canPawnTake(isWhite, whiteBitboard, gameField, moveMap, target)) {
+      if (canPawnTake(isWhite, whiteBitboard, gameField, moveMap, target, auPassantColumn)) {
         moves.add(createMove(figure, target));
       }
       target = figure + moveDirection * 9;
-      if (canPawnTake(isWhite, whiteBitboard, gameField, moveMap, target)) {
+      if (canPawnTake(isWhite, whiteBitboard, gameField, moveMap, target, auPassantColumn)) {
         moves.add(createMove(figure, target));
       }
 
@@ -110,8 +127,8 @@ public class MoveCollector {
     return moves;
   }
 
-  private static boolean canPawnTake(boolean isWhite, boolean[] whiteBitboard, boolean[] gameField, boolean[] moveMap, int target) {
-    return target >= 0 && target < 64 && moveMap[target] && gameField[target] && !Objects.equals(isWhite, whiteBitboard[target]);
+  private static boolean canPawnTake(boolean isWhite, boolean[] whiteBitboard, boolean[] gameField, boolean[] moveMap, int target, int auPassantColumn) {
+    return target >= 0 && target < 64 && moveMap[target] && gameField[target] && !Objects.equals(isWhite, whiteBitboard[target]) || target % 8 == auPassantColumn;
   }
 
   private static String createMove(int fromField, int toField) {
