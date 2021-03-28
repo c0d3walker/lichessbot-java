@@ -10,8 +10,9 @@ import lichessbot.engine.impl.common.Status;
 public class MoveExecutor {
 
   public static IStatus execute(Position position, String move) {
-    int fromField = FieldConverter.toIndex(move.substring(0, 2));
-    int toField = FieldConverter.toIndex(move.substring(2, 4));
+    boolean isWhiteTurn = MetaDataBitboard.isWhiteTurn(position.getMetaDataBitboard());
+    int fromField = FieldConverter.toIndex(isWhiteTurn, move.substring(0, 2));
+    int toField = FieldConverter.toIndex(isWhiteTurn, move.substring(2, move.length()));
     IStatus updateFigureDataStatus = null;
     if (move.length() == 4) {
       updateFigureDataStatus = updateFigureData(position, fromField, toField);
@@ -19,7 +20,6 @@ public class MoveExecutor {
       updateFigureDataStatus = handleComplexMove(position, move, fromField, toField);
     }
     if (updateFigureDataStatus.isOK()) {
-      updatePlayerData(position, fromField, toField);
       MetaDataBitboard.setLastMove(position.getMetaDataBitboard(), move);
     }
     return updateFigureDataStatus;
@@ -27,10 +27,35 @@ public class MoveExecutor {
 
   private static IStatus handleComplexMove(Position position, String move, int fromField, int toField) {
     boolean[] pawnBitboard = position.getPawnBitboard();
+    boolean[] kingsBitboard = position.getKingBitboard();
     if (pawnBitboard[fromField]) {
       return transformPawn(position, pawnBitboard, move, fromField, toField);
+    } else if (kingsBitboard[fromField]) {
+      return castelKing(position, kingsBitboard, fromField, toField);
     }
     return new Status(false, "not implemented yet", "");
+  }
+
+  private static IStatus castelKing(Position position, boolean[] kingsBitboard, int fromField, int toField) {
+    boolean[] whiteBitboard = position.getWhiteBitboard();
+    boolean isWhite = MetaDataBitboard.isWhiteTurn(position.getMetaDataBitboard());
+    int difference = toField - fromField;
+    int direction = difference / Math.abs(difference);
+
+    kingsBitboard[fromField] = false;
+    whiteBitboard[fromField] = false;
+    int kingsTarget = fromField + 2 * direction;
+    kingsBitboard[kingsTarget] = true;
+    whiteBitboard[kingsTarget] = isWhite;
+
+    boolean[] castelBitboard = position.getCastelBitboard();
+    castelBitboard[toField] = false;
+    whiteBitboard[toField] = false;
+    int castelTarget = fromField + direction;
+    castelBitboard[castelTarget] = true;
+    whiteBitboard[castelTarget] = isWhite;
+
+    return new Status(true, "Castel executed", "");
   }
 
   private static IStatus transformPawn(Position position, boolean[] pawnBitboard, String move, int fromField, int toField) {
@@ -54,6 +79,7 @@ public class MoveExecutor {
       return new Status(false, "The given figure type is unknown", newFigure + "");
     }
     targetTypeBitboard[toField] = true;
+    updatePlayerData(position, fromField, toField);
     return new Status(true, "The pawn was transformed successfully", "");
   }
 
@@ -68,6 +94,7 @@ public class MoveExecutor {
     if (isUpdatePending) {
       return new Status(false, "Move denied", "");
     }
+    updatePlayerData(position, fromField, toField);
     return new Status(true, "Move accepted", "");
   }
 
@@ -88,7 +115,7 @@ public class MoveExecutor {
 
     String lastMove = MetaDataBitboard.getLastMove(position.getMetaDataBitboard());
     String lastTarget = lastMove.substring(2);
-    int lastTargetIndex = FieldConverter.toIndex(lastTarget);
+    int lastTargetIndex = FieldConverter.toIndex(false, lastTarget);
     pawnBitboard[lastTargetIndex] = false;
     whiteBitboard[lastTargetIndex] = false;
 

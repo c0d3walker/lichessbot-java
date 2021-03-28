@@ -23,9 +23,9 @@ public class SpecialMoveUtility {
   private static int findAuPassantColumn(Position position, boolean[] pawnBitboard) {
     String lastMove = MetaDataBitboard.getLastMove(position.getMetaDataBitboard());
     if (PAWN_MOVE_PATTERN.matcher(lastMove).matches()) {
-      int target = FieldConverter.toIndex(lastMove.substring(2, 4));
+      int target = FieldConverter.toIndex(false,lastMove.substring(2, 4));
       if (pawnBitboard[target]) {
-        int from = FieldConverter.toIndex(lastMove.substring(0, 2));
+        int from = FieldConverter.toIndex(false,lastMove.substring(0, 2));
         if (Math.abs(target - from) == 16) {
           return target % 8;
         }

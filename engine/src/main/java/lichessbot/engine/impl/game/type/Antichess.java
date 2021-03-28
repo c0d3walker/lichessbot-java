@@ -52,13 +52,13 @@ public class Antichess implements IMoveEvaluator {
 
   private Map<String, Double> evaluateMoves(Position position, List<String> moves) {
     Map<String, Double> map = new HashMap<>();
-
+boolean isWhiteTurn = MetaDataBitboard.isWhiteTurn(position.getMetaDataBitboard());
     boolean[] gameField = GameLoader.getGameField(position);
     for (String move : moves) {
       String from = move.substring(0,2);
       String to = move.substring(2);
-      int toField = FieldConverter.toIndex(to);
-      int fromField=FieldConverter.toIndex(from);
+      int toField = FieldConverter.toIndex(isWhiteTurn,to);
+      int fromField=FieldConverter.toIndex(isWhiteTurn,from);
       if (isTakeMove(position,gameField, fromField,toField)) {
         map.put(move, 1.);
       } else {

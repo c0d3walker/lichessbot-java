@@ -86,9 +86,39 @@ public class MoveExecutorTest {
     IStatus status = MoveExecutor.execute(_position, move);
     assertThat(status.isOK()).isEqualTo(true);
     String lastMove = MetaDataBitboard.getLastMove(_position.getMetaDataBitboard());
-    assertThat(lastMove).isEqualTo(move.substring(0,4));
+    assertThat(lastMove).isEqualTo(move.substring(0, 4));
     assertThat(_position.getPawnBitboard()[58]).isEqualTo(false);
     assertThat(_position.getPawnBitboard()[50]).isEqualTo(false);
     assertThat(_position.getKnightBitboard()[58]).isEqualTo(true);
+  }
+
+  @Test
+  void testExdecuteMove_validMove_shortCasteling() {
+    GameLoader.setKing(_position, 4, true);
+    GameLoader.setCastel(_position, 7, true);
+    String move = "0-0";
+    IStatus status = MoveExecutor.execute(_position, move);
+    assertThat(status.isOK()).isEqualTo(true);
+    assertThat(_position.getKingBitboard()[6]).isEqualTo(true);
+    assertThat(_position.getKingBitboard()[4]).isEqualTo(false);
+    assertThat(_position.getCastelBitboard()[7]).isEqualTo(false);
+    assertThat(_position.getCastelBitboard()[5]).isEqualTo(true);
+    String lastMove = MetaDataBitboard.getLastMove(_position.getMetaDataBitboard());
+    assertThat(lastMove).isEqualTo(move);
+  }
+  
+  @Test
+  void testExdecuteMove_validMove_longCasteling() {
+    GameLoader.setKing(_position, 60, false);
+    GameLoader.setCastel(_position, 56, false);
+    String move = "0-0";
+    IStatus status = MoveExecutor.execute(_position, move);
+    assertThat(status.isOK()).isEqualTo(true);
+    assertThat(_position.getKingBitboard()[6]).isEqualTo(true);
+    assertThat(_position.getKingBitboard()[4]).isEqualTo(false);
+    assertThat(_position.getCastelBitboard()[7]).isEqualTo(false);
+    assertThat(_position.getCastelBitboard()[5]).isEqualTo(true);
+    String lastMove = MetaDataBitboard.getLastMove(_position.getMetaDataBitboard());
+    assertThat(lastMove).isEqualTo(move);
   }
 }
