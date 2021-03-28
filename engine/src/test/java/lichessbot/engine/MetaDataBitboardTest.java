@@ -35,7 +35,7 @@ public class MetaDataBitboardTest {
 
   @Test
   void testSetLastMove() {
-    MetaDataBitboard.setLastMove(_metaDataBitboard, "e4e5");
+    MetaDataBitboard.setLastMove(_metaDataBitboard, "e5e6");
     List<Integer> expectedSetIndices = Arrays.asList(2, 5, 8, 11, 13);
     List<Integer> setPosition = new ArrayList<>();
     for (int setConfigurationIndex = 0; setConfigurationIndex < _metaDataBitboard.length; setConfigurationIndex++) {
@@ -53,12 +53,28 @@ public class MetaDataBitboardTest {
       _metaDataBitboard[configurationIndex] = true;
     }
     String lastMove = MetaDataBitboard.getLastMove(_metaDataBitboard);
-    assertThat(lastMove).isEqualTo("e4e5");
+    assertThat(lastMove).isEqualTo("e5e6");
   }
   
   @Test
   void testLastMoveRoundtrip() {
     String move="a7h1";// isn't a valid move but should work
+    MetaDataBitboard.setLastMove(_metaDataBitboard, move);
+    String lastMove = MetaDataBitboard.getLastMove(_metaDataBitboard);
+    assertThat(lastMove).isEqualTo(move);
+  }
+  
+  @Test
+  void testLongCastelingRoundtrip() {
+    String move="0-0-0";// isn't a valid move but should work
+    MetaDataBitboard.setLastMove(_metaDataBitboard, move);
+    String lastMove = MetaDataBitboard.getLastMove(_metaDataBitboard);
+    assertThat(lastMove).isEqualTo(move);
+  }
+  
+  @Test
+  void testShortCastelingRoundtrip() {
+    String move="0-0";// isn't a valid move but should work
     MetaDataBitboard.setLastMove(_metaDataBitboard, move);
     String lastMove = MetaDataBitboard.getLastMove(_metaDataBitboard);
     assertThat(lastMove).isEqualTo(move);

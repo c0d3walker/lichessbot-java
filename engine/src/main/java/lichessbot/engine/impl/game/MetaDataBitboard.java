@@ -23,14 +23,13 @@ public class MetaDataBitboard {
 
   private static String readMove(boolean[] metaDataBitboard) {
     StringBuilder move = new StringBuilder(4);
-    move.append(readChar(metaDataBitboard, 2, 'a')).append(readChar(metaDataBitboard, 5, '0'));
-    move.append(readChar(metaDataBitboard, 8, 'a')).append(readChar(metaDataBitboard, 11, '0'));
+    move.append(readChar(metaDataBitboard, 2, 'a')).append(readChar(metaDataBitboard, 5, '1'));
+    move.append(readChar(metaDataBitboard, 8, 'a')).append(readChar(metaDataBitboard, 11, '1'));
     return move.toString();
   }
 
   private static char readChar(boolean[] metaDataBitboard, int offset, char toCompare) {
     char symbol = toCompare;
-    symbol+=1;
     if (metaDataBitboard[offset]) {
       symbol += 0x4;
     }
@@ -44,8 +43,7 @@ public class MetaDataBitboard {
   }
 
   private static String readCastelingMove(boolean[] metaDataBitboard) {
-    // TODO Auto-generated method stub
-    return null;
+    return metaDataBitboard[2] ? "0-0-0" : "0-0";
   }
 
   public static void setLastMove(boolean[] metaDataBitboard, String move) {
@@ -60,13 +58,13 @@ public class MetaDataBitboard {
   private static void setMove(boolean[] metaDataBitboard, char[] moveChars) {
     metaDataBitboard[1] = false;
     setForSymbol(metaDataBitboard, moveChars[0], 'a', 2);
-    setForSymbol(metaDataBitboard, moveChars[1], '0', 5);
+    setForSymbol(metaDataBitboard, moveChars[1], '1', 5);
     setForSymbol(metaDataBitboard, moveChars[2], 'a', 8);
-    setForSymbol(metaDataBitboard, moveChars[3], '0', 11);
+    setForSymbol(metaDataBitboard, moveChars[3], '1', 11);
   }
 
   private static void setForSymbol(boolean[] metaDataBitboard, char moveChar, char toCompareChar, int offset) {
-    int position = moveChar - toCompareChar-1;
+    int position = moveChar - toCompareChar ;
     metaDataBitboard[offset] = (position & 0x4) == 0x4;
     metaDataBitboard[offset + 1] = (position & 0x2) == 0x2;
     metaDataBitboard[offset + 2] = (position & 0x1) == 0x1;
