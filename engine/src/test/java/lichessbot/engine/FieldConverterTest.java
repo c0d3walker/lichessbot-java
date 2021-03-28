@@ -15,7 +15,7 @@ public class FieldConverterTest {
   @ParameterizedTest
   @MethodSource("toIndexSource")
   public void testToIndex(String field, int index) {
-    assertThat(FieldConverter.toIndex(field)).isEqualTo(index);
+    assertThat(FieldConverter.toIndex(false,field)).isEqualTo(index);
   }
 
   @ParameterizedTest
